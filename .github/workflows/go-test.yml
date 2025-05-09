@@ -1,0 +1,68 @@
+name: Go Test, Build, and Coverage
+
+on:
+  # Trigger the workflow on push to main or pull request creation
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Build, Test, and Generate Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Go environment
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.20  # Specify your required Go version here
+
+      # Step 3: Cache Go modules
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      # Step 4: Install dependencies
+      - name: Install dependencies
+        run: go mod tidy
+
+      # Step 5: Build the Go project
+      - name: Build the project
+        run: go build -v ./...
+
+      # Step 6: Run tests and generate coverage
+      - name: Run tests with coverage
+        run: |
+          # Run tests with coverage profiling
+          go test -v -cover -coverprofile=coverage.out ./...
+        
+      # Step 7: Upload coverage report
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.out
+
+      # Step 8: Generate coverage HTML (optional, for debugging locally)
+      - name: Generate HTML coverage report
+        if: always()  # Run even if tests fail
+        run: |
+          go tool cover -html=coverage.out -o coverage.html
+      - name: Upload HTML coverage report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: html-coverage-report
+          path: coverage.html
