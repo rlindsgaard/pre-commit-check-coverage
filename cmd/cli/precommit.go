@@ -3,12 +3,12 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"crypto/sha256"
 	"fmt"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
+
+	"github.com/rlindsgaard/pre-commit-check-coverage/crypto"
 )
 
 // Path to sha256sums.txt
@@ -39,7 +39,7 @@ func main() {
 	var missingFiles []string
 	for _, file := range stagedFiles {
 		// Compute the SHA256 checksum of the file
-		checksum, err := computeSHA256(file)
+		checksum, err := crypto.ComputeSHA256(file)
 		if err != nil {
 			fmt.Printf("Error computing SHA256 for %s: %v\n", file, err)
 			os.Exit(1)
@@ -129,22 +129,6 @@ func loadSha256Sums(filePath string) (map[string][]string, error) {
 		return nil, err
 	}
 	return sha256Map, nil
-}
-
-// computeSHA256 computes the SHA256 checksum of a file
-func computeSHA256(filePath string) (string, error) {
-	file, err := os.Open(filepath.Clean(filePath))
-	if err != nil {
-		return "", err
-	}
-	defer file.Close()
-
-	hasher := sha256.New()
-	if _, err := bufio.NewReader(file).WriteTo(hasher); err != nil {
-		return "", err
-	}
-
-	return fmt.Sprintf("%x", hasher.Sum(nil)), nil
 }
 
 // stringInSlice checks if a string is present in a slice
