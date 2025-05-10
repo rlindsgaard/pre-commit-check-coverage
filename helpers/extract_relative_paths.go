@@ -7,10 +7,13 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/rlindsgaard/pre-commit-check-coverage/crypto"
 )
 
 func main() {
 	// Define command-line flags
+	moduleName := flag.String("moduleName", "", "Module name")
 	rootPath := flag.String("root", ".", "Path to the repository root")
 	coverFile := flag.String("coverfile", "cover.out", "Path to the cover.out file")
 	flag.Parse()
@@ -24,7 +27,7 @@ func main() {
 	defer file.Close()
 
 	// Use a map to store unique relative paths
-	uniquePaths := make(map[string]struct{})
+	uniquePaths := make(map[string]string)
 
 	// Read the cover.out file line by line
 	scanner := bufio.NewScanner(file)
@@ -36,21 +39,30 @@ func main() {
 			continue
 		}
 
-		absolutePath := parts[0]
-		if absolutePath == "mode" {
+		fullPath := parts[0]
+		if fullPath == "mode" {
 			continue
 		}
 		// Convert the absolute path to a relative path
-		relativePath, err := filepath.Rel(*rootPath, absolutePath)
+		relativePath, err := filepath.Rel(*moduleName, fullPath)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error converting path to relative: %v\n", err)
 			continue
 		}
 
 		// Add the relative path to the map
-		uniquePaths[relativePath] = struct{}{}
+		uniquePaths[relativePath] = ""
 	}
+	var checksums = make(map[string]string)
+	for key, _ := range uniquePaths {
 
+		absolutePath := filepath.Join(*rootPath, key)
+		checksum, err := crypto.ComputeSHA256(absolutePath)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error computing hash: %v\n", err)
+		}
+		checksums[key] = checksum
+	}
 	// Check for errors during scanning
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading cover file: %v\n", err)
@@ -58,7 +70,7 @@ func main() {
 	}
 
 	// Print the unique relative paths
-	for path := range uniquePaths {
-		fmt.Println(path)
+	for path, checksum := range checksums {
+		fmt.Fprintln(os.Stdout, checksum, "\t", path)
 	}
 }
