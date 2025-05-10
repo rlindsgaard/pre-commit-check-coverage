@@ -2,16 +2,15 @@ package main
 
 import (
 	"os"
-	"strings"
 	"testing"
 )
 
 // Mock function for computing SHA256 checksum
 func mockComputeSHA256(filePath string) (string, error) {
 	mockData := map[string]string{
-		"path/to/file1.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-		"path/to/file2.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-		"path/to/file3.txt": "9d5e3ecdeb89fbb6de1f2b1aebc3c6a2f4c8e9348d7d3e0c5e5b9eb7b8b1a8f9",
+		"path/to/file1.txt":    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+		"path/to/file2.txt":    "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+		"path/to/file3.txt":    "9d5e3ecdeb89fbb6de1f2b1aebc3c6a2f4c8e9348d7d3e0c5e5b9eb7b8b1a8f9",
 		"path/to/new_file.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
 	}
 	checksum, exists := mockData[filePath]
@@ -100,14 +99,4 @@ func TestChecksumMismatch(t *testing.T) {
 			t.Errorf("Checksum for changed file %s should not exist in sha256sums.txt", file)
 		}
 	}
-}
-
-// Helper function to check if a string exists in a slice
-func stringInSlice(str string, list []string) bool {
-	for _, v := range list {
-		if v == str {
-			return true
-		}
-	}
-	return false
 }
