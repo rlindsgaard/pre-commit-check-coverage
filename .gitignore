@@ -20,3 +20,6 @@ go.work.sum
 
 # env file
 .env
+
+# CI/Test generated files
+sha256sums.txt
