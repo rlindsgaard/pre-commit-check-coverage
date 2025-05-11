@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/rlindsgaard/pre-commit-check-coverage/crypto"
+	"github.com/rlindsgaard/pre-commit-check-coverage/internal/hash"
 )
 
 func main() {
@@ -57,7 +57,7 @@ func main() {
 	for key, _ := range uniquePaths {
 
 		absolutePath := filepath.Join(*rootPath, key)
-		checksum, err := crypto.ComputeSHA256(absolutePath)
+		checksum, err := hash.ComputeSHA256(absolutePath)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error computing hash: %v\n", err)
 		}

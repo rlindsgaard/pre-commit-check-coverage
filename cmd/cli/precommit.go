@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/rlindsgaard/pre-commit-check-coverage/crypto"
+	"github.com/rlindsgaard/pre-commit-check-coverage/internal/hash"
 )
 
 // Path to sha256sums.txt
@@ -39,7 +39,7 @@ func main() {
 	var missingFiles []string
 	for _, file := range stagedFiles {
 		// Compute the SHA256 checksum of the file
-		checksum, err := crypto.ComputeSHA256(file)
+		checksum, err := hash.ComputeSHA256(file)
 		if err != nil {
 			fmt.Printf("Error computing SHA256 for %s: %v\n", file, err)
 			os.Exit(1)
