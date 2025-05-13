@@ -33,7 +33,7 @@ func TestComputeSHA256(t *testing.T) {
 	}
 
 	// Expected SHA256 hash for "test content"
-	expected := "d8e8fca2dc0f896fd7cb4cb0031ba249"
+	expected := "6ae8a75555209fd6c44157c0aed8016e763ff435a19cf186f76863140143ff72"
 	if result != expected {
 		t.Errorf("Expected %s, got %s", expected, result)
 	}
