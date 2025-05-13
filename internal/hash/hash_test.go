@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/rlindsgaard/internal/hash"
+	"github.com/rlindsgaard/pre-commit-check-coverage/internal/hash"
 )
 
 func TestComputeSHA256(t *testing.T) {
