@@ -11,7 +11,7 @@ import (
 	"github.com/rlindsgaard/pre-commit-check-coverage/internal/hash"
 )
 
-func Verify(sha25ap map[string][]string) ([]string, error) {
+func Verify(sha25map map[string][]string) ([]string, error) {
 	// Get staged files (excluding deleted files, handling renames)
 	stagedFiles, err := getStagedFiles()
 	if err != nil {
@@ -43,7 +43,7 @@ func Verify(sha25ap map[string][]string) ([]string, error) {
 
 	// If any files are missing, fail the commit
 	if len(missingFiles) > 0 {
-		err := error.New("Found staged files not tested")
+		err := errors.New("Found staged files not tested")
 		return missingFiles, err
 	}
 	return nil, nil
