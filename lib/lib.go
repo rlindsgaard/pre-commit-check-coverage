@@ -12,7 +12,7 @@ import (
 	"github.com/rlindsgaard/pre-commit-check-coverage/internal/hash"
 )
 
-func Verify(sha25Map map[string][]string) ([]string, error) {
+func Verify(sha256Map map[string][]string) ([]string, error) {
 	// Get staged files (excluding deleted files, handling renames)
 	stagedFiles, err := getStagedFiles()
 	if err != nil {
