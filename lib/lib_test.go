@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"bytes"
 	"testing"
 
 	"github.com/stretchr/testify/mock"
