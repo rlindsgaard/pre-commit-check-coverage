@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"os"
 	"os/exec"
 	"strings"
 
@@ -45,7 +44,7 @@ func Verify(sha256Map map[string][]string, commandRunner CommandRunner) ([]strin
 		// Compute the SHA256 checksum of the file
 		checksum, err := hash.ComputeSHA256(file)
 		if err != nil {
-			return nil, fmt.Errof("Error computing SHA256 for %s: %v\n", file, err)
+			return nil, fmt.Errorf("Error computing SHA256 for %s: %v\n", file, err)
 		
 		}
 
