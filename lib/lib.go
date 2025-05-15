@@ -2,6 +2,7 @@ package lib
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -88,7 +89,7 @@ func getStagedFiles(runner CommandRunner) ([]string, error) {
 
 	// Parse the output to filter files
 	var files []string
-	scanner := bufio.NewScanner(&output)
+	scanner := bufio.NewScanner(bytes.NewReader(output))
 	for scanner.Scan() {
 		line := scanner.Text()
 		parts := strings.Fields(line)
