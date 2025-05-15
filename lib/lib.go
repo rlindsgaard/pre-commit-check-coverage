@@ -2,7 +2,6 @@ package lib
 
 import (
 	"bufio"
-	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -80,7 +79,6 @@ func newGitCommandRunner() CommandRunner {
 
 // getStagedFiles retrieves the list of staged files (excluding deleted files, handling renames)
 func getStagedFiles(runner CommandRunner) ([]string, error) {
-	var output bytes.Buffer
 	runner.Run()
 
 	output, err := runner.Output()
