@@ -39,7 +39,7 @@ func TestGetStagedFiles(t *testing.T) {
 	// Validate the results
 	expectedFiles := []string{"newfile.txt", "modifiedfile.txt", "newfile.txt"}
 	if len(files) != len(expectedFiles) {
-		t.Fatalf("Expected %d files, got %d", len(expectedFiles), len(files))
+		t.Fatalf("Expected %d files, got %d (%v)", len(expectedFiles), len(files), files)
 	}
 	for i, file := range files {
 		if file != expectedFiles[i] {
