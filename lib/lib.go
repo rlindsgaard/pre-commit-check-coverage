@@ -36,7 +36,7 @@ func Verify(sha256Map map[string][]string, commandRunner CommandRunner) ([]strin
 	
 	stagedFiles, err := getStagedFiles(commandRunner)
 	if err != nil {	
-        return [], fmt.Errorf("Could not retrieve stages files: %v", err)
+        return nil, fmt.Errorf("Could not retrieve stages files: %v", err)
 	}
 	
 	// Check each staged file against the sha256sums.txt
@@ -45,7 +45,7 @@ func Verify(sha256Map map[string][]string, commandRunner CommandRunner) ([]strin
 		// Compute the SHA256 checksum of the file
 		checksum, err := hash.ComputeSHA256(file)
 		if err != nil {
-			return [], fmt.Errof("Error computing SHA256 for %s: %v\n", file, err)
+			return nil, fmt.Errof("Error computing SHA256 for %s: %v\n", file, err)
 		
 		}
 
