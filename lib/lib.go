@@ -31,14 +31,12 @@ func (r *RealCommandRunner) Output() ([]byte, error) {
 	return r.cmd.Output()
 }
 
-func Verify(sha256Map map[string][]string) ([]string, error) {
+func Verify(sha256Map map[string][]string, commandRunner CommandRunner) ([]string, error) {
 	// Get staged files (excluding deleted files, handling renames)
-	commandRunner := newGitCommandRunner()
 	
 	stagedFiles, err := getStagedFiles(commandRunner)
-	if err != nil {
-		fmt.Printf("Error retrieving staged files: %v\n", err)
-		os.Exit(1)
+	if err != nil {	
+        return [], fmt.Errorf("Could not retrieve stages files: %v", err)
 	}
 	
 	// Check each staged file against the sha256sums.txt
@@ -47,8 +45,8 @@ func Verify(sha256Map map[string][]string) ([]string, error) {
 		// Compute the SHA256 checksum of the file
 		checksum, err := hash.ComputeSHA256(file)
 		if err != nil {
-			fmt.Printf("Error computing SHA256 for %s: %v\n", file, err)
-			os.Exit(1)
+			return [], fmt.Errof("Error computing SHA256 for %s: %v\n", file, err)
+		
 		}
 
 		// Check if the checksum exists in the sha256sums.txt
