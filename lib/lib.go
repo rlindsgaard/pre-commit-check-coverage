@@ -12,9 +12,30 @@ import (
 	"github.com/rlindsgaard/pre-commit-check-coverage/internal/hash"
 )
 
+// CommandRunner interface to abstract command execution
+type CommandRunner interface {
+	Run() error
+	Output() ([]byte, error)
+}
+
+// RealCommandRunner is the real implementation of CommandRunner using exec.Command
+type RealCommandRunner struct {
+	cmd *exec.Cmd
+}
+
+func (r *RealCommandRunner) Run() error {
+	return r.cmd.Run()
+}
+
+func (r *RealCommandRunner) Output() ([]byte, error) {
+	return r.cmd.Output()
+}
+
 func Verify(sha256Map map[string][]string) ([]string, error) {
 	// Get staged files (excluding deleted files, handling renames)
-	stagedFiles, err := getStagedFiles()
+	commandRunner := newGitCommandRunner()
+	
+	stagedFiles, err := getStagedFiles(commandRunner)
 	if err != nil {
 		fmt.Printf("Error retrieving staged files: %v\n", err)
 		os.Exit(1)
@@ -50,19 +71,26 @@ func Verify(sha256Map map[string][]string) ([]string, error) {
 	return nil, nil
 }
 
+// Helper function to create a new CommandRunner for the git command
+func newGitCommandRunner() CommandRunner {
+	return &RealCommandRunner{
+		cmd: exec.Command("git", "diff", "--cached", "--name-status"),
+	}
+}
+
 // getStagedFiles retrieves the list of staged files (excluding deleted files, handling renames)
-func getStagedFiles() ([]string, error) {
-	cmd := exec.Command("git", "diff", "--cached", "--name-status")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
+func getStagedFiles(runner CommandRunner) ([]string, error) {
+	var output bytes.Buffer
+	runner.Run()
+
+	output, err := runner.Output()
 	if err != nil {
 		return nil, err
 	}
 
 	// Parse the output to filter files
 	var files []string
-	scanner := bufio.NewScanner(&out)
+	scanner := bufio.NewScanner(&output)
 	for scanner.Scan() {
 		line := scanner.Text()
 		parts := strings.Fields(line)
