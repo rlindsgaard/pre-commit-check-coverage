@@ -98,7 +98,7 @@ func getStagedFiles(runner CommandRunner) ([]string, error) {
 			continue
 		}
 
-		status := parts[0][0]
+		status := fmt.Sprintf("%c", parts[0][0])
 		fmt.Printf("%s", status)
 		switch status {
 		case `A`, `M`, `C`: // Added, Modified, Copied
