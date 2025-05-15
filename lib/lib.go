@@ -92,6 +92,7 @@ func getStagedFiles(runner CommandRunner) ([]string, error) {
 	scanner := bufio.NewScanner(bytes.NewReader(output))
 	for scanner.Scan() {
 		line := scanner.Text()
+		fmt.Printf("Parsing line: '%s'", line)
 		parts := strings.Fields(line)
 		if len(parts) < 2 {
 			continue
@@ -100,8 +101,10 @@ func getStagedFiles(runner CommandRunner) ([]string, error) {
 		status := parts[0]
 		switch status {
 		case "A", "M", "C": // Added, Modified, Copied
+		fmt.Printf("AMC: %s", parts[1])
 			files = append(files, parts[1])
 		case "R": // Renamed
+		fmt.Printf("R: %s", parts[2])
 			files = append(files, parts[2]) // Only include the destination file
 		}
 	}

@@ -26,7 +26,7 @@ func TestGetStagedFiles(t *testing.T) {
 	mockRunner := new(MockCommandRunner)
 
 	// Define the mocked output of the command
-	mockOutput := []byte("A\tnewfile.txt\nM\tmodifiedfile.txt\nR100\toldfile.txt\tnewfile.txt\nD\tdeletedfile.txt\n")
+	mockOutput := []byte("A\tnewfile.txt\nM\tmodifiedfile.txt\nR100\toldfile.txt\tnewfilelocation.txt\nD\tdeletedfile.txt\n")
 	mockRunner.On("Run").Return(nil)
 	mockRunner.On("Output").Return(mockOutput, nil)
 
@@ -37,7 +37,7 @@ func TestGetStagedFiles(t *testing.T) {
 	}
 
 	// Validate the results
-	expectedFiles := []string{"newfile.txt", "modifiedfile.txt", "newfile.txt"}
+	expectedFiles := []string{"newfile.txt", "modifiedfile.txt", "newfilelocation.txt"}
 	if len(files) != len(expectedFiles) {
 		t.Fatalf("Expected %d files, got %d (%v)", len(expectedFiles), len(files), files)
 	}
