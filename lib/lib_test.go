@@ -3,6 +3,7 @@ package lib
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -33,6 +34,7 @@ func TestVerifyEmptyDiff(t *testing.T) {
 		"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": {"path/to/file1.txt", "path/to/file2.txt"},
 		"9d5e3ecdeb89fbb6de1f2b1aebc3c6a2f4c8e9348d7d3e0c5e5b9eb7b8b1a8f9": {"path/to/file3.txt"},
 	}
+	
 	files, err := Verify(checksums, mockRunner)
 	if err != nil {
 		t.Fatalf("Verify return an err: %v", err)
@@ -42,6 +44,27 @@ func TestVerifyEmptyDiff(t *testing.T) {
 		t.Errorf("Expected no missing files but found: %v", files)
 	}
 }
+
+func TestDiffFilesCovered(t *testing.T) {
+	// Arrange
+	mockRunner := new(MockCommandRunner)
+	
+	mockOutput := []byte("A\tpath/to/file1.txt\nM\tpath/to/file3.txt")
+	mockRunner.On("Run").Return(nil)
+	mockRunner.On("Output").Return(mockOutput)
+	
+	checksums := map[string][]string{
+		"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": {"path/to/file1.txt", "path/to/file2.txt"},
+		"9d5e3ecdeb89fbb6de1f2b1aebc3c6a2f4c8e9348d7d3e0c5e5b9eb7b8b1a8f9": {"path/to/file3.txt"},
+	}
+	// Act
+	missingFiles, err := Verify(checksums, mockRunner)
+	
+	// Assert
+	assert.Nil(t, missingFiles)
+	assert.Nil(t, err)
+}
+
 
 func TestGetStagedFiles(t *testing.T) {
 	// Create a mock CommandRunner
