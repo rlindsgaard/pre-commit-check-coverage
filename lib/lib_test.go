@@ -39,7 +39,7 @@ func TestVerifyEmptyDiff(t *testing.T) {
 	}
 	
 	if files != nil {
-		t.Error("Expected no missing files but found: %v", files)
+		t.Errorf("Expected no missing files but found: %v", files)
 	}
 }
 
