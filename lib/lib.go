@@ -101,11 +101,9 @@ func getStagedFiles(runner CommandRunner) ([]string, error) {
 		status := parts[0][0]
 		fmt.Printf("%s", status)
 		switch status {
-		case "A", "M", "C": // Added, Modified, Copied
-		fmt.Printf("AMC: %s", parts[1])
+		case `A`, `M`, `C`: // Added, Modified, Copied
 			files = append(files, parts[1])
-		case "R": // Renamed
-		fmt.Printf("R: %s", parts[2])
+		case `R`: // Renamed
 			files = append(files, parts[2]) // Only include the destination file
 		}
 	}
