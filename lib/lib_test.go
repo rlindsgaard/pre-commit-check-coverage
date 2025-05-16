@@ -64,6 +64,27 @@ func TestVerifyEmptyDiff(t *testing.T) {
 	}
 }
 
+func TestDiffFilesNotTested(t *testing.T) {
+	mockRunner := new(MockCommandRunner)
+	mockChecksummer := new(MockChecksumComputer)
+	
+	mockOutput := []byte("A\tpath/to/file1.txt\nM\tpath/to/file3.txt")
+	
+	mockRunner.On("Run").Return(nil)
+	mockRunner.On("Output").Return(mockOutput, nil)
+
+	checksums := map[string][]string{
+		"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855": {"path/to/file1.txt", "path/to/file2.txt"},
+	}
+	
+	// Act
+	missingFiles, err := Verify(checksums, mockRunner, checksummer)
+	
+	// Assert
+	assert.Equal(t, []string{}, missingFiles)	
+	assert.EqualError(t, err, errors.New("Found staged files not tested"))
+}
+
 func TestDiffFilesCovered(t *testing.T) {
 	// Arrange
 	mockRunner := new(MockCommandRunner)
