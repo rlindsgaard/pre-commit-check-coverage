@@ -1,6 +1,7 @@
 package lib
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"testing"
@@ -78,7 +79,7 @@ func TestDiffFilesNotTested(t *testing.T) {
 	}
 	
 	// Act
-	missingFiles, err := Verify(checksums, mockRunner, checksummer)
+	missingFiles, err := Verify(checksums, mockRunner, mockChecksummer)
 	
 	// Assert
 	assert.Equal(t, []string{}, missingFiles)	
