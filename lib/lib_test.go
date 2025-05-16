@@ -81,7 +81,7 @@ func TestDiffFilesNotTested(t *testing.T) {
 	missingFiles, err := Verify(checksums, mockRunner, mockChecksummer)
 	
 	// Assert
-	assert.Equal(t, []string{}, missingFiles)	
+	assert.Equal(t, []string{"path/to/file3.txt"}, missingFiles)	
 	assert.EqualError(t, err, "Found staged files not tested")
 }
 
