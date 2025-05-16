@@ -67,6 +67,7 @@ func TestVerifyEmptyDiff(t *testing.T) {
 func TestDiffFilesCovered(t *testing.T) {
 	// Arrange
 	mockRunner := new(MockCommandRunner)
+	checksummer := new(MockChecksumComputer
 	
 	mockOutput := []byte("A\tpath/to/file1.txt\nM\tpath/to/file3.txt")
 	mockRunner.On("Run").Return(nil)
@@ -85,7 +86,7 @@ func TestDiffFilesCovered(t *testing.T) {
 	
 	
 	// Act
-	missingFiles, err := Verify(checksums, mockRunner)
+	missingFiles, err := Verify(checksums, mockRunner, checksummer)
 	
 	// Assert
 	assert.Nil(t, missingFiles)
