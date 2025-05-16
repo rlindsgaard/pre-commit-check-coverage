@@ -30,7 +30,19 @@ func (r *RealCommandRunner) Output() ([]byte, error) {
 	return r.cmd.Output()
 }
 
-func Verify(sha256Map map[string][]string, commandRunner CommandRunner) ([]string, error) {
+type ChecksumComputer interface {
+	Compute([]byte) ([]byte, error)
+}
+
+type RealChecksumComputer struct {
+	hashfunc *hash.ComputeSHA256
+}
+
+func (r *RealChecksumComputer) Compute(fpath []bytes) ([]bytes, error){
+	return r.hashfunc(fpath)
+}
+
+func Verify(sha256Map map[string][]string, commandRunner CommandRunner, hasher ChecksumComputer) ([]string, error) {
 	// Get staged files (excluding deleted files, handling renames)
 	
 	stagedFiles, err := getStagedFiles(commandRunner)
@@ -42,9 +54,9 @@ func Verify(sha256Map map[string][]string, commandRunner CommandRunner) ([]strin
 	var missingFiles []string
 	for _, file := range stagedFiles {
 		// Compute the SHA256 checksum of the file
-		checksum, err := hash.ComputeSHA256(file)
+		checksum, err := hasher.Compute(file)
 		if err != nil {
-			return nil, fmt.Errorf("Error computing SHA256 for %s: %v\n", file, err)
+			return nil, fmt.Errorf("Error computing checksum for %s: %v\n", file, err)
 		
 		}
 
