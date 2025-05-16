@@ -67,7 +67,7 @@ func TestVerifyEmptyDiff(t *testing.T) {
 func TestDiffFilesCovered(t *testing.T) {
 	// Arrange
 	mockRunner := new(MockCommandRunner)
-	checksummer := new(MockChecksumComputer
+	checksummer := new(MockChecksumComputer)
 	
 	mockOutput := []byte("A\tpath/to/file1.txt\nM\tpath/to/file3.txt")
 	mockRunner.On("Run").Return(nil)
