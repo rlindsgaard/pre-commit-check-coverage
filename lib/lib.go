@@ -31,13 +31,13 @@ func (r *RealCommandRunner) Output() ([]byte, error) {
 }
 
 type ChecksumComputer interface {
-	Compute([]byte) ([]byte, error)
+	Compute(string) (string, error)
 }
 
 type RealChecksumComputer struct {
 }
 
-func (r *RealChecksumComputer) Compute(fpath []byte) ([]byte, error){
+func (r *RealChecksumComputer) Compute(fpath string) (string, error){
 	return hash.ComputeSHA256(fpath)
 }
 
