@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"testing"
@@ -83,7 +82,7 @@ func TestDiffFilesNotTested(t *testing.T) {
 	
 	// Assert
 	assert.Equal(t, []string{}, missingFiles)	
-	assert.EqualError(t, err, errors.New("Found staged files not tested"))
+	assert.EqualError(t, err, "Found staged files not tested")
 }
 
 func TestDiffFilesCovered(t *testing.T) {
