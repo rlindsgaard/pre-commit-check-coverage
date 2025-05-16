@@ -28,9 +28,9 @@ type MockChecksumComputer struct {
 
 func (m MockChecksumComputer) Compute(fname string) (string, error){
 	hashes := map[string]string{
-		"path/to/file1.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-		"path/to/file2.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
-		"path/to/file3.txt": "9d5e3ecdeb89fbb6de1f2b1aebc3c6a2f4c8e9348d7d3e0c5e5b9eb7b8b1a8f9"
+		"path/to/file1.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+		"path/to/file2.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+		"path/to/file3.txt": "9d5e3ecdeb89fbb6de1f2b1aebc3c6a2f4c8e9348d7d3e0c5e5b9eb7b8b1a8f9",
 	}
 	if h, exists := hashes[fname]; exists {
 		return h, nil
