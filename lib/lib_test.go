@@ -42,7 +42,7 @@ func (m MockChecksumComputer) Compute(fname string) (string, error){
 
 func TestVerifyEmptyDiff(t *testing.T) {
 	mockRunner := new(MockCommandRunner)
-	cheksummer := new(MockChecksumComputer)
+	checksummer := new(MockChecksumComputer)
 	
 	mockOutput := []byte("\n")
 	
