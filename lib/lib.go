@@ -35,10 +35,10 @@ type ChecksumComputer interface {
 }
 
 type RealChecksumComputer struct {
-	hashfunc *hash.ComputeSHA256
+	hashfunc hash.ComputeSHA256
 }
 
-func (r *RealChecksumComputer) Compute(fpath []bytes) ([]bytes, error){
+func (r *RealChecksumComputer) Compute(fpath []bytes) ([]byte, error){
 	return r.hashfunc(fpath)
 }
 
