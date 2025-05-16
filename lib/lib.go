@@ -35,11 +35,10 @@ type ChecksumComputer interface {
 }
 
 type RealChecksumComputer struct {
-	hashfunc hash.ComputeSHA256
 }
 
 func (r *RealChecksumComputer) Compute(fpath []byte) ([]byte, error){
-	return r.hashfunc(fpath)
+	return hash.ComputeSHA256(fpath)
 }
 
 func Verify(sha256Map map[string][]string, commandRunner CommandRunner, hasher ChecksumComputer) ([]string, error) {
