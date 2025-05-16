@@ -1,6 +1,8 @@
 package lib
 
 import (
+	"fmt"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -35,11 +37,12 @@ func (m MockChecksumComputer) Compute(fname string) (string, error){
 	if h, exists := hashes[fname]; exists {
 		return h, nil
 	}
-	return nil, fmt.Errorf("No checksum found for file: '%s'", fname)
+	return "", fmt.Errorf("No checksum found for file: '%s'", fname)
 }
 
 func TestVerifyEmptyDiff(t *testing.T) {
 	mockRunner := new(MockCommandRunner)
+	cheksummer := new(MockChecksumComputer)
 	
 	mockOutput := []byte("\n")
 	
@@ -51,7 +54,7 @@ func TestVerifyEmptyDiff(t *testing.T) {
 		"9d5e3ecdeb89fbb6de1f2b1aebc3c6a2f4c8e9348d7d3e0c5e5b9eb7b8b1a8f9": {"path/to/file3.txt"},
 	}
 	
-	files, err := Verify(checksums, mockRunner)
+	files, err := Verify(checksums, mockRunner, checksummer)
 	if err != nil {
 		t.Fatalf("Verify return an err: %v", err)
 	}
@@ -78,7 +81,7 @@ func TestDiffFilesCovered(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create temporary directory: %v", err)
 	}
-	defer s.RemoveAll(tmpDir)
+	defer os.RemoveAll(tmpDir)
 	
 	
 	// Act
